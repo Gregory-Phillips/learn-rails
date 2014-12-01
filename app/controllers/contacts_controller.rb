@@ -1,20 +1,19 @@
-class ContactsController < ApplicationController
+class VisitorsController < ApplicationController
 	def new
-		@contact = Contact.new
+		@visitor = Visitor.new
 	end
 	def create
-		@contact = Contact.new(secure_params)
-		if @contact.valid?
-			@contact.update_spreadsheet
-		# TODO send message
-		flash[:notice] = "Message sent from #{@contact.name}."
-		redirect_to root_path
+		@visitor = Visitor.new(secure_params)
+		if @visitor.valid?
+			@visitor.subscribe
+			flash[:notice] = "Signed up #{@visitor.email}."
+			redirect_to root_path
 		else
 			render :new
 		end
 	end
 	private
 	def secure_params
-		params.require(:contact).permit(:name, :email, :content)
+		params.require(:visitor).permit(:email)
 	end
 end
